@@ -45,12 +45,21 @@ BLOCK_COMMENT : '/*' (.)*? '*/' -> skip                        // <--
 /** The start rule */
 prog: stat+ ;
 
+
+// added while, print, and seperator
+
 stat: expr SEPARATOR                                    # bareExpr
     | IF '(' expr ')' block ELSE block                  # ifThenElse
     | IF '(' expr ')' block                             # ifThen
+    | WHILE '(' expr ')' block                          # while
+    | PRINT '(' expr ')' SEPARATOR?                     # print
+    | SEPARATOR                                         # empty 
     ;
 
+// added AddSub and compare
 expr: expr op=( '*' | '/' | '%' ) expr                  # MulDivMod
+    | expr op=( '+' | '-' ) expr                        # AddSub          
+    | expr op=( '<' | '>' | '<=' | '>=' | '==' ) expr   # Compare
     | INT                                               # int
     | '(' expr ')'                                      # parens
     ;
