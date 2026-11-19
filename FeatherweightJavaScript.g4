@@ -6,9 +6,15 @@ grammar FeatherweightJavaScript;
 // Reserved words
 IF        : 'if' ;
 ELSE      : 'else' ;
+WHILE     : 'while' ;              // <--
+FUNCTION  : 'function' ;              // <-- 
+VAR       : 'var' ;              // <--
+PRINT     : 'print' ;              // <--
 
 // Literals
 INT       : [1-9][0-9]* | '0' ;
+BOOL      : 'true' | 'false' ;              // <-- 
+NULL      : 'null' ;               // <--
 
 // Symbols
 MUL       : '*' ;
@@ -25,11 +31,14 @@ GE        : '>=' ;
 LE        : '<=' ;
 EQUAL     : '==' ;
 
+//rules for variable names
+ID        : [a-zA-Z_][a-zA-Z0-9_]* ;                 // <-- 
+
 // Whitespace and comments
-NEWLINE   : '\r'? '\n' -> skip ;
+NEWLINE   : '\r'? '\n' | '\r\n' | '\n' -> skip ;                    // <--  added the | '\r\n' | '\n' part
 LINE_COMMENT  : '//' ~[\n\r]* -> skip ;
 WS            : [ \t]+ -> skip ; // ignore whitespace
-
+BLOCK_COMMENT : '/*' (.)*? '*/' -> skip                        // <-- 
 
 // ***Parsing rules ***
 
