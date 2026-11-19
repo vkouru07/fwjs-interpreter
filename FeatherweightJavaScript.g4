@@ -45,6 +45,26 @@ BLOCK_COMMENT : '/*' (.)*? '*/' -> skip                        // <--
 /** The start rule */
 prog: stat+ ;
 
+function_definition : FUNCTION '(' definition_params ')' block 
+	| FUNCTION '()' block ; 
+
+function_call : FUNCTION '(' call_params ')' 
+	| FUNCTION '()' 
+
+definition_params : 
+	| ID
+	| ID ',' ID
+	; 
+
+call_params :
+	| ID 
+	| expr
+	| param ',' param
+	; 
+
+var_declaration : 'var' assignment ; 
+assignment : ID '=' expr ; 
+var_reference : ID ; 
 
 // added while, print, and seperator
 
@@ -62,8 +82,18 @@ expr: expr op=( '*' | '/' | '%' ) expr                  # MulDivMod
     | expr op=( '<' | '>' | '<=' | '>=' | '==' ) expr   # Compare
     | INT                                               # int
     | '(' expr ')'                                      # parens
+	| function_definition								# functionDefinition
+	| function_call										# functionCall
+	| var_declaration									# variableDeclaration
+	| var_reference										# variableReference
+	| assignment										# assignment
     ;
 
 block: '{' stat* '}'                                    # fullBlock
      | stat                                             # simpBlock
      ;
+
+
+
+
+
