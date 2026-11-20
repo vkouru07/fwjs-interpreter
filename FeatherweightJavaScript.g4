@@ -6,15 +6,15 @@ grammar FeatherweightJavaScript;
 // Reserved words
 IF        : 'if' ;
 ELSE      : 'else' ;
-WHILE     : 'while' ;              // <--
-FUNCTION  : 'function' ;              // <-- 
-VAR       : 'var' ;              // <--
-PRINT     : 'print' ;              // <--
+WHILE     : 'while' ;            
+FUNCTION  : 'function' ;           
+VAR       : 'var' ;            
+PRINT     : 'print' ;           
 
 // Literals
 INT       : [1-9][0-9]* | '0' ;
-BOOL      : 'true' | 'false' ;              // <-- 
-NULL      : 'null' ;               // <--
+BOOL      : 'true' | 'false' ;          
+NULL      : 'null' ;           
 
 // Symbols
 MUL       : '*' ;
@@ -27,18 +27,20 @@ SUB       : '-' ;
 MOD       : '%' ;
 GT        : '>' ;
 LT        : '<' ;
+ASSIGN    : '=' ;
 GE        : '>=' ;
 LE        : '<=' ;
 EQUAL     : '==' ;
 
+
 //rules for variable names
-ID        : [a-zA-Z_][a-zA-Z0-9_]* ;                 // <-- 
+ID        : [a-zA-Z_][a-zA-Z0-9_]* ;            
 
 // Whitespace and comments
-NEWLINE   : '\r'? '\n' | '\r\n' | '\n' -> skip ;                    // <--  added the | '\r\n' | '\n' part
+NEWLINE   : '\r'? '\n' -> skip ;                  
 LINE_COMMENT  : '//' ~[\n\r]* -> skip ;
 WS            : [ \t]+ -> skip ; // ignore whitespace
-BLOCK_COMMENT : '/*' (.)*? '*/' -> skip                        // <-- 
+BLOCK_COMMENT : '/*' (.)*? '*/' -> skip                   
 
 // ***Parsing rules ***
 
@@ -87,6 +89,8 @@ expr: expr op=( '*' | '/' | '%' ) expr                  # MulDivMod
 	| var_declaration									# variableDeclaration
 	| var_reference										# variableReference
 	| assignment										# assignment
+	| BOOL                                              # boolean
+	| NULL                                              # null
     ;
 
 block: '{' stat* '}'                                    # fullBlock
